@@ -18,33 +18,6 @@ void push(struct Node** head, int node_data)
    newNode->next = (*head);
    (*head) = newNode;
 }
-
-/*void sortList() {  
-        //Node current will point to head  
-        struct node *current = head, *index = NULL;  
-        int temp;  
-          
-        if(head == NULL) {  
-            return;  
-        }  
-        else {  
-            while(current != NULL) {  
-                //Node index will point to node next to current  
-                index = current->next;  
-                  
-                while(index != NULL) {  
-                    //If current node's data is greater than index's node data, swap the data between them  
-                    if(current->data > index->data) {  
-                        temp = current->data;  
-                        current->data = index->data;  
-                        index->data = temp;  
-                    }  
-                    index = index->next;  
-                }  
-                current = current->next;  
-            }      
-        }  
-    } */
  //Check if element is in list(used in the histogram)
 bool search(Node* head, int x)
 {
@@ -57,10 +30,8 @@ bool search(Node* head, int x)
     }
     return false;
 }
-
 // display linked list contents
-void displayList(struct Node *node)
-{
+void displayList(struct Node *node){
    while (node != NULL)
    {
       cout<<node->data<<"-->";
@@ -68,22 +39,8 @@ void displayList(struct Node *node)
    }
  
 }
-void createHistogram(struct Node *node,struct Node *histogram)
-{
-   while (node != NULL)
-   {
-      int x=node->data;
-      if(search(histogram,x)){
-      node = node->next;
-      }else{
-         push(histogram,x);
-         node = node->next;
-      }
-   }
- 
-}
 //main program 
-int main() { 
+int main() {
    // empty list L
    struct Node* L = NULL;  
 
@@ -99,13 +56,21 @@ int main() {
    for(int i=0;i<n;i++){
       push(&L, random_element ());
    } 
-cout<<"Final linked list: "<<endl;
-displayList(L);
 
 //histogram
 struct Node* histogram = NULL;
-createHistogram(&L,&histogram);
+while (L != NULL)
+   {
+      int x=L->data;
+      if(search(histogram,x)){
+      L = L->next;
+      }else{
+         push(&histogram,x);
+         L = L->next;
+      }
+   }
 cout<<"Histogram list: "<<endl;
+MergeSort(&histogram);
 displayList(histogram);
 return 0;
 
