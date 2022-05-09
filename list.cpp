@@ -5,40 +5,10 @@
 using namespace std;
  
 // linked list 
-struct Node
-{
-   int data;
-   struct Node *next;
-};
-//new  node in front
-void push(struct Node** head, int node_data)
-{
-   struct Node* newNode = new Node;
-   newNode->data = node_data;
-   newNode->next = (*head);
-   (*head) = newNode;
-}
- //Check if element is in list(used in the histogram)
-bool search(Node* head, int x)
-{
-    Node* current = head; // Initialize current
-    while (current != NULL)
-#include <iostream>
-#include <random>
-#include <functional>
-
-using namespace std;
- 
-// linked list 
 struct node
 {
    int data;
    struct node *next;
-   node()
-    {
-        data = 0;
-        next = NULL;
-    }
 };
 //new  node in front
 void push(struct node** head, int node_data)
@@ -47,6 +17,16 @@ void push(struct node** head, int node_data)
    newnode->data = node_data;
    newnode->next = (*head);
    (*head) = newnode;
+}
+//used to place a node with the cpunt after the number at histogram
+node* insertAtPosition(node* head, int count)
+{
+    node*curr=head;
+    node* temp = new node;
+    temp->data = count;
+    temp->next=curr->next;
+    curr->next=temp;
+    return head;
 }
  //Check if element is in list(used in the histogram)
 bool search(node* head, int x)
@@ -151,7 +131,20 @@ node * mergeSort(node *start)
 
     return new_head;
 }
-
+void histogramInsertion(node*histogram,node*L){
+    while(histogram!=NULL){
+        int counter=0;
+        while(L!=NULL){
+            if(L->data==histogram->data){
+                counter++;
+                cout<<counter<<endl;
+            }
+            L=L->next;
+        }
+        histogram=insertAtPosition(histogram,counter);
+    }
+    displayList(histogram);
+}
 
 //main program 
 int main() {
@@ -183,11 +176,14 @@ while (L != NULL)
          L = L->next;
       }
    }
-cout<<"Histogram list: "<<endl;
-displayList(histogram);
-cout<<"Histogram list Sorted: "<<endl;
+//cout<<"Histogram list: "<<endl;
+//displayList(histogram);
+//cout<<"Histogram list Sorted: "<<endl;
 histogram=mergeSort(histogram);
-displayList(histogram);
+//displayList(histogram);
+//histogram=histogramInsertion(histogram,L);
+cout<<"Final Histogram list Sorted: "<<endl;
+histogramInsertion(histogram,L);
 return 0;
 
 
