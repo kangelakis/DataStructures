@@ -8,8 +8,11 @@ using namespace std;
 struct node
 {
    int data;
+   //int counter;//used only in histogram
    struct node *next;
 };
+
+
 //new  node in front
 void push(struct node** head, int node_data)
 {
@@ -17,16 +20,6 @@ void push(struct node** head, int node_data)
    newnode->data = node_data;
    newnode->next = (*head);
    (*head) = newnode;
-}
-//used to place a node with the cpunt after the number at histogram
-node* insertAtPosition(node* head, int count)
-{
-    node*curr=head;
-    node* temp = new node;
-    temp->data = count;
-    temp->next=curr->next;
-    curr->next=temp;
-    return head;
 }
  //Check if element is in list(used in the histogram)
 bool search(node* head, int x)
@@ -41,14 +34,37 @@ bool search(node* head, int x)
     return false;
 }
 // display linked list contents
+
+
 void displayList(struct node *node){
    while (node != NULL)
    {
-      cout<<node->data<<"-->";
+      if(node->next != NULL){
+         cout<<node->data<<"-->";
+         node = node->next; 
+      }else{
+         cout << node->data;
+         break;
+      }
+          
+   }
+    cout<<endl;
+}
+  
+
+
+
+/*void displayHistogram(struct node *node){
+   while (node != NULL)
+   {
+      cout<<node->data<<"=="<<node->counter<<*"-->";
       node = node->next;
    }
+   cout<<endl;
  
-}
+}*/
+
+
 node * tortoiseAndHareApproach(node *head)
 {
     node* slow = head;
@@ -109,6 +125,8 @@ node * merge(node *left, node *right)
 
 // Function to recursively  divide the linked list
 node * mergeSort(node *start)
+
+
 {
     if (start -> next == NULL)
     {
@@ -126,24 +144,81 @@ node * mergeSort(node *start)
 
     node *left = mergeSort(start);
     node *right = mergeSort(start_of_right);
-
     node *new_head = merge(left, right);
 
     return new_head;
+   
 }
-void histogramInsertion(node*histogram,node*L){
-    while(histogram!=NULL){
-        int counter=0;
-        while(L!=NULL){
+
+int counter(node*histogram,node*L){
+   int cntr = 0;
+   while(L!=NULL){
             if(L->data==histogram->data){
-                counter++;
-                cout<<counter<<endl;
+                cntr++;
             }
             L=L->next;
         }
-        histogram=insertAtPosition(histogram,counter);
+   return cntr;
+}
+void insertAfter(node* prev_node, int new_data)
+{
+    node* new_node = new node;
+    new_node->data = new_data;
+    new_node->next = prev_node->next;
+    prev_node->next = new_node;
+}
+void PushLast(node** head_ref, int new_data)
+{
+    
+    return;
+}
+node* histogramCounter(node*histogram,node*L){
+    while(histogram!=NULL){
+        int cntr=counter(histogram,L);
+        if(histogram->next==NULL){
+            node* new_node = new node;
+        }
+        node *last = histogram;
+        new_node->data = cntr;
+        new_node->next = NULL;
+        if (*histogram == NULL){
+            *histogram = cntr;
+        
+            while (last->next != NULL){
+                last = last->next;
+            }
+            last->next = new_node;
+            *histogram=histogram->next;
+        }else{
+            node* new_node = new node;
+            new_node->data = cntr;
+            new_node->next = histogram->next;
+            histogram->next = new_node;
+            histogram=new_node->next;
+        }
+    
+ 
     }
-    displayList(histogram);
+    return histogram;
+}
+    
+
+
+
+node*histogramCreation(node*histogram,node*L){
+   while (L != NULL){
+      int x=L->data;
+      if(!search(histogram,x)){
+        push(&histogram,x);
+      }
+
+      if(L->next == NULL){
+        break;
+      }else{
+        L = L->next;
+      }
+   }
+   return histogram;
 }
 
 //main program 
@@ -166,25 +241,16 @@ int main() {
 
 //histogram
 struct node* histogram = NULL;
-while (L != NULL)
-   {
-      int x=L->data;
-      if(search(histogram,x)){
-      L = L->next;
-      }else{
-         push(&histogram,x);
-         L = L->next;
-      }
-   }
-//cout<<"Histogram list: "<<endl;
-//displayList(histogram);
-//cout<<"Histogram list Sorted: "<<endl;
-histogram=mergeSort(histogram);
-//displayList(histogram);
-//histogram=histogramInsertion(histogram,L);
-cout<<"Final Histogram list Sorted: "<<endl;
-histogramInsertion(histogram,L);
+histogram=histogramCreation(histogram,L) ;
+   cout<<"List: "<<endl;
+   displayList(L);
+   cout<<"Histogram list Sorted: "<<endl;
+   histogram=mergeSort(histogram);
+
+   displayList(histogram);
+   cout<<"Final Histogram list Sorted: "<<endl;
+   histogram=histogramCounter(histogram,L);
+   displayList(histogram);
+
 return 0;
-
-
 }
