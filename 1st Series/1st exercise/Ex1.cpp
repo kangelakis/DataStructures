@@ -3,7 +3,7 @@
 #include <functional>
 
 using namespace std;
- 
+
 // linked list 
 struct node
 {
@@ -204,10 +204,9 @@ int main() {
     //Histogram
     struct node* histogram = NULL;
     histogram=histogramCreation(histogram,L) ;
-
     //Display output
     cout<<"List: "<<endl;
-    displayList(L);
+    displayList(L); // Time consuming.. if this is commented out the algorithm will run faster
     cout<<"Histogram (1/2 Phase): "<<endl;
     histogram=mergeSort(histogram);
     displayList(histogram);
