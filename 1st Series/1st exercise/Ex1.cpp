@@ -194,9 +194,11 @@ int main() {
     
     //Empty list L
     struct node* L = NULL;  
-    cout << "Enter the desired amount of numbers: ";
     int n;
-    cin >> n;
+    do{
+        cout << "Enter the desired amount of numbers: ";
+        cin >> n;
+    }while(n<=0);
     for(int i=0;i<n;i++){
         push(&L, random_element ());
     } 
@@ -214,6 +216,9 @@ int main() {
     histogram=histogramCounter(histogram,L);
     displayList(histogram);
 
-    system("pause");
+    //Wait for user input before exiting
+    cout<<endl<< "Press any key to exit...";
+    cin.ignore();  
+    cin.get(); 
     return 0;
 }
